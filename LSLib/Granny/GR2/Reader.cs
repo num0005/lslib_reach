@@ -243,6 +243,8 @@ namespace LSLib.Granny.GR2
                 }
                 else if (section.Header.uncompressedSize > 0)
                 {
+                    throw new NotImplementedException("Sorry, decompressing GR2 sections is not supported!");
+                    /*
                     if (hdr.compression == 4)
                     {
                         var uncompressed = Granny2Compressor.Decompress4(
@@ -257,6 +259,7 @@ namespace LSLib.Granny.GR2
                             (int)hdr.first16bit, (int)hdr.first8bit, (int)hdr.uncompressedSize);
                         Stream.Write(uncompressed, 0, uncompressed.Length);
                     }
+                    */
                 }
 
 #if DEBUG_GR2_SERIALIZATION
@@ -300,6 +303,8 @@ namespace LSLib.Granny.GR2
             InputStream.Seek(section.Header.relocationsOffset, SeekOrigin.Begin);
             if (section.Header.compression == 4)
             {
+                throw new NotImplementedException("Sorry, decompressing GR2 sections is not supported!");
+                /*
                 using (var reader = new BinaryReader(InputStream, Encoding.Default, true))
                 {
                     UInt32 compressedSize = reader.ReadUInt32();
@@ -311,6 +316,7 @@ namespace LSLib.Granny.GR2
                         ReadSectionRelocationsInternal(section, ms);
                     }
                 }
+                */
             }
             else
             {
@@ -389,6 +395,8 @@ namespace LSLib.Granny.GR2
             InputStream.Seek(section.Header.mixedMarshallingDataOffset, SeekOrigin.Begin);
             if (section.Header.compression == 4)
             {
+                throw new NotImplementedException("Sorry, decompressing GR2 sections is not supported!");
+                /*
                 using (var reader = new BinaryReader(InputStream, Encoding.Default, true))
                 {
                     UInt32 compressedSize = reader.ReadUInt32();
@@ -400,6 +408,7 @@ namespace LSLib.Granny.GR2
                         ReadSectionMixedMarshallingRelocationsInternal(section, ms);
                     }
                 }
+                */
             }
             else
             {
