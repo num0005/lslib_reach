@@ -53,9 +53,6 @@
     <ClCompile Include="AssemblyInfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="physics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="lz4\lz4.c">
       <Filter>Source Files\lz4</Filter>
     </ClCompile>
