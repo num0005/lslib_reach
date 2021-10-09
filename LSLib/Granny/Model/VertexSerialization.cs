@@ -2,6 +2,7 @@
 using OpenTK;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -361,6 +362,11 @@ namespace LSLib.Granny.Model
                     {
                         case ColorMapType.Float4: WriteVector4(section, color); break;
                         case ColorMapType.Byte4: WriteNormalByteVector4(section, color); break;
+                        case ColorMapType.Float3:
+                            if (color.W != 0)
+                                Debug.Print("well W!");
+                            WriteVector3(section, new Vector3(color));
+                            break;
                         default: throw new Exception($"Cannot unserialize color map: Unsupported format {d.ColorMapType}");
                     }
                 }
@@ -373,8 +379,9 @@ namespace LSLib.Granny.Model
                     var uv = v.GetUV(i);
                     switch (d.TextureCoordinateType)
                     {
-                        case TextureCoordinateType.Float2: WriteVector2(section, uv); break;
-                        case TextureCoordinateType.Half2: WriteHalfVector2(section, uv); break;
+                        case TextureCoordinateType.Float2: WriteVector2(section, new Vector2(uv.X, uv.Y)); break;
+                        case TextureCoordinateType.Float3: WriteVector3(section, uv); break;
+                        case TextureCoordinateType.Half2: WriteHalfVector2(section, new Vector2(uv.X, uv.Y)); break;
                         default: throw new Exception($"Cannot serialize UV map: Unsupported format {d.TextureCoordinateType}");
                     }
                 }
@@ -448,6 +455,7 @@ namespace LSLib.Granny.Model
                     switch (d.ColorMapType)
                     {
                         case ColorMapType.Float4: color = ReadVector4(reader); break;
+                        case ColorMapType.Float3: color = new Vector4(ReadVector3(reader)); break;
                         case ColorMapType.Byte4: color = ReadNormalByteVector4(reader); break;
                         default: throw new Exception($"Cannot unserialize color map: Unsupported format {d.ColorMapType}");
                     }
@@ -460,11 +468,12 @@ namespace LSLib.Granny.Model
             {
                 for (var i = 0; i < d.TextureCoordinates; i++)
                 {
-                    Vector2 uv;
+                    Vector3 uv;
                     switch (d.TextureCoordinateType)
                     {
-                        case TextureCoordinateType.Float2: uv = ReadVector2(reader); break;
-                        case TextureCoordinateType.Half2: uv = ReadHalfVector2(reader); break;
+                        case TextureCoordinateType.Float2: uv = new Vector3(ReadVector2(reader)); break;
+                        case TextureCoordinateType.Float3: uv = ReadVector3(reader); break;
+                        case TextureCoordinateType.Half2: uv = new Vector3(ReadHalfVector2(reader)); break;
                         default: throw new Exception($"Cannot unserialize UV map: Unsupported format {d.TextureCoordinateType}");
                     }
 
@@ -591,6 +600,7 @@ namespace LSLib.Granny.Model
                 switch (desc.ColorMapType)
                 {
                     case ColorMapType.Float4: AddMember(defn, "DiffuseColor" + i.ToString(), MemberType.Real32, 4); break;
+                    case ColorMapType.Float3: AddMember(defn, "DiffuseColor" + i.ToString(), MemberType.Real32, 3); break;
                     case ColorMapType.Byte4: AddMember(defn, "DiffuseColor" + i.ToString(), MemberType.NormalUInt8, 4); break;
                 }
             }

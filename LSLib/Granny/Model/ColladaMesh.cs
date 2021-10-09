@@ -554,7 +554,7 @@ namespace LSLib.Granny.Model
                         }
                         for (int uv = 0; uv < UVInputIndices.Count(); uv++ )
                         {
-                            vertex.SetUV(uv, UVs[uv][index[UVInputIndices[uv]]]);
+                            vertex.SetUV(uv, new Vector3(UVs[uv][index[UVInputIndices[uv]]]));
                         }
                         for (int color = 0; color < ColorInputIndices.Count(); color++)
                         {

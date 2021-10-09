@@ -85,7 +85,7 @@ namespace LSLib.Granny.Model
     {
         public Deduplicator<SkinnedVertex> Vertices = new Deduplicator<SkinnedVertex>(new GenericEqualityComparer<SkinnedVertex>());
         public Deduplicator<Matrix3> Normals = new Deduplicator<Matrix3>(new GenericEqualityComparer<Matrix3>());
-        public List<Deduplicator<Vector2>> UVs = new List<Deduplicator<Vector2>>();
+        public List<Deduplicator<Vector3>> UVs = new List<Deduplicator<Vector3>>();
         public List<Deduplicator<Vector4>> Colors = new List<Deduplicator<Vector4>>();
 
         public void MakeIdentityMapping(List<Vertex> vertices)
@@ -110,7 +110,7 @@ namespace LSLib.Granny.Model
             var numUvs = format.TextureCoordinates;
             for (var uv = 0; uv < numUvs; uv++)
             {
-                var uvDedup = new Deduplicator<Vector2>(new GenericEqualityComparer<Vector2>());
+                var uvDedup = new Deduplicator<Vector3>(new GenericEqualityComparer<Vector3>());
                 uvDedup.MakeIdentityMapping(vertices.Select(v => v.GetUV(uv)));
                 UVs.Add(uvDedup);
             }
@@ -147,7 +147,7 @@ namespace LSLib.Granny.Model
             var numUvs = format.TextureCoordinates;
             for (var uv = 0; uv < numUvs; uv++)
             {
-                var uvDedup = new Deduplicator<Vector2>(new GenericEqualityComparer<Vector2>());
+                var uvDedup = new Deduplicator<Vector3>(new GenericEqualityComparer<Vector3>());
                 uvDedup.Deduplicate(vertices.Select(v => v.GetUV(uv)));
                 UVs.Add(uvDedup);
             }
@@ -376,11 +376,16 @@ namespace LSLib.Granny.Model
         public Int16 Int16;
     }
 
+    public class TriAnnotation
+    {
+        public Int32 Int32;
+    }
+
     public class TriAnnotationSet
     {
         public string Name;
         [Serialization(Type = MemberType.ReferenceToVariantArray)]
-        public object TriAnnotations;
+        public List<TriAnnotation> TriAnnotations;
         public Int32 IndicesMapFromTriToAnnotation;
         [Serialization(Section = SectionType.RigidIndex, Prototype = typeof(TriIndex), Kind = SerializationKind.UserMember, Serializer = typeof(Int32ListSerializer))]
         public List<Int32> TriAnnotationIndices;

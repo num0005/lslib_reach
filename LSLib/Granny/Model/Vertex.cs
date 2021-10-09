@@ -66,6 +66,7 @@ namespace LSLib.Granny.Model
     {
         None,
         Float4,
+        Float3,
         Byte4
     };
 
@@ -73,6 +74,7 @@ namespace LSLib.Granny.Model
     {
         None,
         Float2,
+        Float3,
         Half2
     };
 
@@ -242,6 +244,10 @@ namespace LSLib.Granny.Model
                         vertexFormat += "D";
                         attributeCounts += "4";
                         break;
+                    case ColorMapType.Float3:
+                        vertexFormat += "D";
+                        attributeCounts += "3";
+                        break;
 
                     case ColorMapType.Byte4:
                         vertexFormat += "CD";
@@ -260,6 +266,10 @@ namespace LSLib.Granny.Model
                     case TextureCoordinateType.Float2:
                         vertexFormat += "T";
                         attributeCounts += "2";
+                        break;
+                    case TextureCoordinateType.Float3:
+                        vertexFormat += "T";
+                        attributeCounts += "3";
                         break;
 
                     case TextureCoordinateType.Half2:
@@ -301,14 +311,14 @@ namespace LSLib.Granny.Model
         public Vector3 Binormal;
         public Vector4 Color0;
         public Vector4 Color1;
-        public Vector2 TextureCoordinates0;
-        public Vector2 TextureCoordinates1;
-        public Vector2 TextureCoordinates2;
-        public Vector2 TextureCoordinates3;
+        public Vector3 TextureCoordinates0;
+        public Vector3 TextureCoordinates1;
+        public Vector3 TextureCoordinates2;
+        public Vector3 TextureCoordinates3;
 
         protected Vertex() { }
 
-        public Vector2 GetUV(int index)
+        public Vector3 GetUV(int index)
         {
             switch (index)
             {
@@ -320,7 +330,7 @@ namespace LSLib.Granny.Model
             }
         }
 
-        public void SetUV(int index, Vector2 uv)
+        public void SetUV(int index, Vector3 uv)
         {
             switch (index)
             {
@@ -541,6 +551,10 @@ namespace LSLib.Granny.Model
                         {
                             desc.ColorMapType = ColorMapType.Float4;
                         }
+                        else if (member.Type == MemberType.Real32 && member.ArraySize == 3)
+                        {
+                            desc.ColorMapType = ColorMapType.Float3;
+                        }
                         else if (member.Type == MemberType.NormalUInt8 && member.ArraySize == 4)
                         {
                             desc.ColorMapType = ColorMapType.Byte4;
@@ -565,12 +579,17 @@ namespace LSLib.Granny.Model
                         {
                             desc.TextureCoordinateType = TextureCoordinateType.Float2;
                         }
+                        else if (member.Type == MemberType.Real32 && member.ArraySize == 3)
+                        {
+                            desc.TextureCoordinateType = TextureCoordinateType.Float3;
+                        }
                         else if (member.Type == MemberType.Real16 && member.ArraySize == 2)
                         {
                             desc.TextureCoordinateType = TextureCoordinateType.Half2;
                         }
                         else
                         {
+                            // todo fix this
                             throw new Exception($"Unsupported texture coordinate format: {member.Type}, {member.ArraySize}");
                         }
                         break;

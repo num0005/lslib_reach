@@ -932,6 +932,11 @@ namespace LSLib.Granny.GR2
                             else
                             {
                                 var items = node as System.Collections.IList;
+                                if (items is null)
+                                {
+                                    Debug.Print($"That's odd {node} cannot be converted to an IList");
+                                    return node;
+                                }
                                 var type = items.GetType().GetGenericArguments().Single();
                                 if (definition.Type == MemberType.ReferenceToVariantArray &&
                                     kind != SerializationKind.UserElement &&

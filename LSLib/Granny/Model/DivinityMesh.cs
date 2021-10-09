@@ -167,6 +167,13 @@ namespace LSLib.Granny.Model
                         formats.Add(Make(DivinityVertexUsage.TexCoord, DivinityVertexAttributeFormat.Real32, 2, (byte)i));
                     }
                 }
+                else if (format.TextureCoordinateType == TextureCoordinateType.Float3)
+                {
+                    for (int i = 0; i < format.TextureCoordinates; i++)
+                    {
+                        formats.Add(Make(DivinityVertexUsage.TexCoord, DivinityVertexAttributeFormat.Real32, 3, (byte)i));
+                    }
+                }
                 else
                 {
                     throw new InvalidOperationException($"UV format not supported in LSM: {format.TextureCoordinateType}");
