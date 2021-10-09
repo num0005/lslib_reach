@@ -1,19 +1,15 @@
-﻿using System;
+﻿using LSLib.LS;
+using LSLib.LS.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using LSLib.LS;
-using LSLib.LS.Enums;
-using LSLib.LS.Story;
-using Node = LSLib.LS.Story.Node;
 
 namespace ConverterApp
 {
     public partial class OsirisPane : UserControl
     {
-        private Story _story;
         public Game Game;
 
         public OsirisPane(ISettingsDataSource settingsDataSource)
@@ -42,28 +38,6 @@ namespace ConverterApp
 
         private void LoadStory(Stream s)
         {
-            var reader = new StoryReader();
-            _story = reader.Read(s);
-
-            databaseSelectorCb.Items.Clear();
-            foreach (KeyValuePair<uint, Database> database in _story.Databases)
-            {
-                var name = "(Unnamed)";
-                Node owner = database.Value.OwnerNode;
-                if (owner != null)
-                {
-                    name = owner.Name.Length > 0 ? $"{owner.Name}({owner.NumParams})" : $"<{owner.TypeName()}>";
-                }
-
-                name += $" #{database.Key} ({database.Value.Facts.Count} rows)";
-
-                databaseSelectorCb.Items.Add(name);
-
-                if (databaseSelectorCb.Items.Count > 0)
-                {
-                    databaseSelectorCb.SelectedIndex = 0;
-                }
-            }
         }
 
         public Resource LoadResourceFromSave(string path)
@@ -160,15 +134,6 @@ namespace ConverterApp
                 globalsLsf.ReleaseStream();
             }
 
-            // Save story resource and pack into the Story.Story attribute in globals.lsf
-            using (var storyStream = new MemoryStream())
-            {
-                var storyWriter = new StoryWriter();
-                storyWriter.Write(storyStream, _story);
-
-                LSLib.LS.Node storyNode = resource.Regions["Story"].Children["Story"][0];
-                storyNode.Attributes["Story"].Value = storyStream.ToArray();
-            }
 
             // Save globals.lsf
             var rewrittenStream = new MemoryStream();
@@ -214,25 +179,10 @@ namespace ConverterApp
 
         private void SaveStory()
         {
-            using (var file = new FileStream(storyFilePath.Text, FileMode.Create, FileAccess.Write))
-            {
-                var writer = new StoryWriter();
-                writer.Write(file, _story);
-            }
         }
 
         private void saveStoryBtn_Click(object sender, EventArgs e)
         {
-            if (_story == null)
-            {
-                MessageBox.Show("No story file loaded.", "Story save failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (MessageBox.Show($"Story export is an experimental feature and may corrupt your story files.{Environment.NewLine}Are you sure you want to continue?", "Save story", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
-            {
-                return;
-            }
 
             string extension = Path.GetExtension(storyFilePath.Text)?.ToLower();
 
@@ -260,81 +210,14 @@ namespace ConverterApp
 
         private void decompileStoryBtn_Click(object sender, EventArgs e)
         {
-            if (_story == null)
-            {
-                MessageBox.Show("A story file must be loaded before exporting.", "Story export failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            string debugPath = Path.Combine(goalPath.Text, "debug.log");
-            using (var debugFile = new FileStream(debugPath, FileMode.Create, FileAccess.Write))
-            {
-                using (var writer = new StreamWriter(debugFile))
-                {
-                    _story.DebugDump(writer);
-                }
-            }
-
-            string unassignedPath = Path.Combine(goalPath.Text, "UNASSIGNED_RULES.txt");
-            using (var goalFile = new FileStream(unassignedPath, FileMode.Create, FileAccess.Write))
-            {
-                using (var writer = new StreamWriter(goalFile))
-                {
-                    var dummyGoal = new Goal(_story)
-                    {
-                        ExitCalls = new List<Call>(),
-                        InitCalls = new List<Call>(),
-                        ParentGoals = new List<GoalReference>(),
-                        SubGoals = new List<GoalReference>(),
-                        Name = "UNASSIGNED_RULES",
-                        Index = 0
-                    };
-                    dummyGoal.MakeScript(writer, _story);
-                }
-            }
-
-            foreach (KeyValuePair<uint, Goal> goal in _story.Goals)
-            {
-                string filePath = Path.Combine(goalPath.Text, $"{goal.Value.Name}.txt");
-                using (var goalFile = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                {
-                    using (var writer = new StreamWriter(goalFile))
-                    {
-                        goal.Value.MakeScript(writer, _story);
-                    }
-                }
-            }
-
-            MessageBox.Show("Story unpacked successfully.");
         }
 
         private void databaseSelectorCb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            databaseGrid.DataSource = null;
-            databaseGrid.Columns.Clear();
-
-            if (databaseSelectorCb.SelectedIndex == -1)
-            {
-                return;
-            }
-
-            Database database = _story.Databases[(uint) databaseSelectorCb.SelectedIndex + 1];
-            databaseGrid.DataSource = database.Facts;
-
-            for (var i = 0; i < database.Parameters.Types.Count; i++)
-            {
-                databaseGrid.Columns[i].HeaderText = $"{i} ({_story.Types[database.Parameters.Types[i]].Name})";
-            }
         }
 
         private void btnDebugExport_Click(object sender, EventArgs e)
         {
-            string filePath = Path.Combine(goalPath.Text, "debug.json");
-            using (var debugFileStream = new FileStream(filePath, FileMode.Create))
-            {
-                var sev = new StoryDebugExportVisitor(debugFileStream);
-                sev.Visit(_story);
-            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using LSLib.LS;
 using LSLib.LS.Enums;
-using LSLib.LS.Story;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,6 @@ namespace ConverterApp
         private Package SavePackage;
         private Resource SaveMeta;
         private Resource SaveGlobals;
-        private Story SaveStory;
 
         public Game GameVersion { get; set; }
         public string SaveFilePath { get; set; }
@@ -171,40 +169,10 @@ namespace ConverterApp
             ReportProgress(80, "Dumping story ...");
             string debugPath = Path.Combine(DataDumpPath, "GoalsDebug.log");
             using (var debugFile = new FileStream(debugPath, FileMode.Create, FileAccess.Write))
-            using (var writer = new StreamWriter(debugFile))
-            {
-                SaveStory.DebugDump(writer);
-            }
 
             ReportProgress(85, "Dumping story goals ...");
             string goalsPath = Path.Combine(DataDumpPath, "Goals");
             FileManager.TryToCreateDirectory(Path.Combine(goalsPath, "Dummy"));
-
-            string unassignedPath = Path.Combine(goalsPath, "UNASSIGNED_RULES.txt");
-            using (var goalFile = new FileStream(unassignedPath, FileMode.Create, FileAccess.Write))
-            using (var writer = new StreamWriter(goalFile))
-            {
-                var dummyGoal = new Goal(SaveStory)
-                {
-                    ExitCalls = new List<Call>(),
-                    InitCalls = new List<Call>(),
-                    ParentGoals = new List<GoalReference>(),
-                    SubGoals = new List<GoalReference>(),
-                    Name = "UNASSIGNED_RULES",
-                    Index = 0
-                };
-                dummyGoal.MakeScript(writer, SaveStory);
-            }
-
-            foreach (KeyValuePair<uint, Goal> goal in SaveStory.Goals)
-            {
-                string filePath = Path.Combine(goalsPath, $"{goal.Value.Name}.txt");
-                using (var goalFile = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-                using (var writer = new StreamWriter(goalFile))
-                {
-                    goal.Value.MakeScript(writer, SaveStory);
-                }
-            }
         }
 
         private void RunTasks()
@@ -256,25 +224,6 @@ namespace ConverterApp
             ReportProgress(70, "Loading story ...");
             LSLib.LS.Node storyNode = SaveGlobals.Regions["Story"].Children["Story"][0];
             var storyStream = new MemoryStream(storyNode.Attributes["Story"].Value as byte[]);
-            var reader = new StoryReader();
-            SaveStory = reader.Read(storyStream);
-
-            if (DumpStoryGoals)
-            {
-                DumpGoals();
-            }
-
-            if (DumpStoryDatabases)
-            {
-                ReportProgress(90, "Dumping databases ...");
-                var dbDumpPath = Path.Combine(DataDumpPath, "Databases.txt");
-                using (var dbDumpStream = new FileStream(dbDumpPath, FileMode.Create, FileAccess.Write, FileShare.Read))
-                {
-                    var dbDumper = new DatabaseDumper(dbDumpStream);
-                    dbDumper.DumpUnnamedDbs = IncludeUnnamedDatabases;
-                    dbDumper.DumpAll(SaveStory);
-                }
-            }
 
             ReportProgress(100, "");
         }
