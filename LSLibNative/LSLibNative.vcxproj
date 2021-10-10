@@ -122,7 +122,6 @@
     <ClInclude Include="lz4\lz4frame_static.h" />
     <ClInclude Include="lz4\lz4hc.h" />
     <ClInclude Include="lz4\xxhash.h" />
-    <ClInclude Include="physics.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />

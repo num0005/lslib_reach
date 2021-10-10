@@ -21,9 +21,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="physics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="lz4wrapper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
