@@ -634,11 +634,7 @@ namespace LSLib.LS
         public void UncompressPackage(string packagePath, string outputPath, Func<AbstractFileInfo, bool> filter = null)
         {
             ProgressUpdate("Reading package headers ...", 0, 1, null);
-            using (var reader = new PackageReader(packagePath))
-            {
-                Package package = reader.Read();
-                UncompressPackage(package, outputPath, filter);
-            }
+            throw new NotImplementedException();
         }
 
         private static Package CreatePackageFromPath(string path)
@@ -673,14 +669,7 @@ namespace LSLib.LS
             package.Metadata.Priority = options.Priority;
 
             ProgressUpdate("Creating archive ...", 0, 1, null);
-            using (var writer = new PackageWriter(package, packagePath))
-            {
-                writer.WriteProgress += WriteProgressUpdate;
-                writer.Version = options.Version;
-                writer.Compression = options.Compression;
-                writer.CompressionLevel = options.FastCompression ? CompressionLevel.FastCompression : CompressionLevel.DefaultCompression;
-                writer.Write();
-            }
+            throw new NotImplementedException();
         }
     }
 }

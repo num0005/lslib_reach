@@ -143,12 +143,9 @@
     <Compile Include="LS\Resources\LSX\LSXWriter.cs" />
     <Compile Include="LS\Matrix.cs" />
     <Compile Include="LS\NodeAttribute.cs" />
-    <Compile Include="LS\PackageReader.cs" />
-    <Compile Include="LS\PackageWriter.cs" />
     <Compile Include="LS\PackageCommon.cs" />
     <Compile Include="LS\Resource.cs" />
     <Compile Include="LS\ResourceUtils.cs" />
-    <Compile Include="LS\Save\VariableManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Crc32.cs" />
     <None Include="OpenTK.dll.config" />

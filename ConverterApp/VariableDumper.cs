@@ -1,8 +1,6 @@
 ﻿using LSLib.LS;
-using LSLib.LS.Save;
 using System;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace ConverterApp
@@ -11,7 +9,6 @@ namespace ConverterApp
     {
         private StreamWriter Writer;
         private Resource Rsrc;
-        private OsirisVariableHelper VariablesHelper;
 
         public bool IncludeDeletedVars { get; set; }
         public bool IncludeLocalScopes { get; set; }
@@ -30,83 +27,18 @@ namespace ConverterApp
 
         private void DumpCharacter(Node characterNode)
         {
-            if (characterNode.Children.TryGetValue("VariableManager", out var varNodes))
-            {
-                var characterVars = new VariableManager(VariablesHelper);
-                characterVars.Load(varNodes[0]);
-
-                var key = characterNode.Attributes["CurrentTemplate"].Value.ToString();
-                if (characterNode.Attributes.ContainsKey("Stats"))
-                {
-                    key += " (" + (string)characterNode.Attributes["Stats"].Value + ")";
-                }
-                else if (characterNode.Children.ContainsKey("PlayerData"))
-                {
-                    var playerData = characterNode.Children["PlayerData"][0]
-                        .Children["PlayerCustomData"][0];
-                    if (playerData.Attributes.TryGetValue("Name", out NodeAttribute name))
-                    {
-                        key += " (Player " + (string)name.Value + ")";
-                    }
-                }
-
-                DumpVariables(key, characterVars);
-            }
         }
 
         private void DumpItem(Node itemNode)
         {
-            if (itemNode.Children.TryGetValue("VariableManager", out var varNodes))
-            {
-                var itemVars = new VariableManager(VariablesHelper);
-                itemVars.Load(varNodes[0]);
-
-                var key = itemNode.Attributes["CurrentTemplate"].Value.ToString();
-                if (itemNode.Attributes.ContainsKey("Stats"))
-                {
-                    key += " (" + (string)itemNode.Attributes["Stats"].Value + ")";
-                }
-
-                DumpVariables(key, itemVars);
-            }
         }
 
-        private void DumpGlobals(Node globalVarsNode)
-        {
-            var vars = new VariableManager(VariablesHelper);
-            vars.Load(globalVarsNode);
-            DumpVariables("Globals", vars);
-        }
 
-        private void DumpVariables(string label, VariableManager variableMgr)
-        {
-            var variables = variableMgr.GetAll(IncludeDeletedVars);
-
-            if (!IncludeLocalScopes)
-            {
-                variables = variables
-                    .Where(kv => !kv.Key.Contains('.'))
-                    .ToDictionary(kv => kv.Key, kv => kv.Value);
-            }
-
-            if (variables.Count > 0)
-            {
-                Writer.WriteLine($"{label}:");
-                foreach (var kv in variables)
-                {
-                    Writer.WriteLine($"\t{kv.Key}: {kv.Value}");
-                }
-
-                Writer.WriteLine("");
-            }
-        }
 
         public void Load(Resource resource)
         {
             Rsrc = resource;
             Node osiHelper = resource.Regions["OsirisVariableHelper"];
-            VariablesHelper = new OsirisVariableHelper();
-            VariablesHelper.Load(osiHelper);
         }
 
         public void DumpGlobals()
@@ -115,7 +47,6 @@ namespace ConverterApp
             var globalVarsNode = osiHelper.Children["VariableManager"][0];
 
             Writer.WriteLine(" === DUMP OF GLOBALS === ");
-            DumpGlobals(globalVarsNode);
         }
 
         public void DumpCharacters()

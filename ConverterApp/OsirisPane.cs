@@ -42,31 +42,7 @@ namespace ConverterApp
 
         public Resource LoadResourceFromSave(string path)
         {
-            var packageReader = new PackageReader(path);
-            Package package = packageReader.Read();
-            
-            AbstractFileInfo abstractFileInfo = package.Files.FirstOrDefault(p => p.Name.ToLowerInvariant() == "globals.lsf");
-            if (abstractFileInfo == null)
-            {
-                MessageBox.Show("The specified package is not a valid savegame (globals.lsf not found)", "Load Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return null;
-            }
-
-            Resource resource;
-            Stream rsrcStream = abstractFileInfo.MakeStream();
-            try
-            {
-                using (var rsrcReader = new LSFReader(rsrcStream))
-                {
-                    resource = rsrcReader.Read();
-                }
-            }
-            finally
-            {
-                abstractFileInfo.ReleaseStream();
-            }
-
-            return resource;
+            throw new NotImplementedException();
         }
 
         private void loadStoryBtn_Click(object sender, EventArgs e)
@@ -108,73 +84,7 @@ namespace ConverterApp
 
         private void SaveSavegameDatabase()
         {
-            var conversionParams = ResourceConversionParameters.FromGameVersion(Game);
-            var packageReader = new PackageReader(storyFilePath.Text);
-            Package package = packageReader.Read();
-
-            AbstractFileInfo globalsLsf = package.Files.FirstOrDefault(p => p.Name.ToLowerInvariant() == "globals.lsf");
-            if (globalsLsf == null)
-            {
-                MessageBox.Show("The specified package is not a valid savegame (globals.lsf not found)", "Load Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Load globals.lsf
-            Resource resource;
-            Stream rsrcStream = globalsLsf.MakeStream();
-            try
-            {
-                using (var rsrcReader = new LSFReader(rsrcStream))
-                {
-                    resource = rsrcReader.Read();
-                }
-            }
-            finally
-            {
-                globalsLsf.ReleaseStream();
-            }
-
-
-            // Save globals.lsf
-            var rewrittenStream = new MemoryStream();
-            var rsrcWriter = new LSFWriter(rewrittenStream);
-            rsrcWriter.Version = conversionParams.LSF;
-            rsrcWriter.EncodeSiblingData = false;
-            rsrcWriter.Write(resource);
-            rewrittenStream.Seek(0, SeekOrigin.Begin);
-
-            // Re-package global.lsf
-            var rewrittenPackage = new Package();
-            StreamFileInfo globalsRepacked = StreamFileInfo.CreateFromStream(rewrittenStream, "globals.lsf");
-            rewrittenPackage.Files.Add(globalsRepacked);
-
-            List<AbstractFileInfo> files = package.Files.Where(x => x.Name.ToLowerInvariant() != "globals.lsf").ToList();
-            rewrittenPackage.Files.AddRange(files);
-
-            using (var packageWriter = new PackageWriter(rewrittenPackage, $"{storyFilePath.Text}.tmp"))
-            {
-                packageWriter.Version = conversionParams.PAKVersion;
-                packageWriter.Compression = CompressionMethod.Zlib;
-                packageWriter.CompressionLevel = CompressionLevel.DefaultCompression;
-                packageWriter.Write();
-            }
-
-            rewrittenStream.Dispose();
-            packageReader.Dispose();
-
-            // Create a backup of the original .lsf
-            string backupPath = $"{storyFilePath.Text}.backup";
-            if (!File.Exists(backupPath))
-            {
-                File.Move(storyFilePath.Text, backupPath);
-            }
-            else
-            {
-                File.Delete(storyFilePath.Text);
-            }
-
-            // Replace original savegame with new one
-            File.Move($"{storyFilePath.Text}.tmp", storyFilePath.Text);
+            throw new NotImplementedException();
         }
 
         private void SaveStory()

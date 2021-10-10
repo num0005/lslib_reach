@@ -77,10 +77,6 @@ namespace ConverterApp
                 packager.UncompressPackage(extractPackagePath.Text, extractionPath.Text);
                 MessageBox.Show("Package extracted successfully.");
             }
-            catch (NotAPackageException)
-            {
-                MessageBox.Show($"The specified package ({extractPackagePath.Text}) is not an Original Sin package or savegame archive.", "Extraction Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
             catch (Exception exc)
             {
                 MessageBox.Show($"Internal error!{Environment.NewLine}{Environment.NewLine}{exc}", "Extraction Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);

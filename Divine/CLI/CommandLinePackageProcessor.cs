@@ -37,40 +37,7 @@ namespace Divine.CLI
         {
             try
             {
-                using (var reader = new PackageReader(packagePath))
-                {
-                    Package package = reader.Read();
-                    // Try to match by full path
-                    AbstractFileInfo file = package.Files.Find(fileInfo => string.Compare(fileInfo.Name, packagedPath, StringComparison.OrdinalIgnoreCase) == 0 && !fileInfo.IsDeletion());
-                    if (file == null)
-                    {
-                        // Try to match by filename only
-                        file = package.Files.Find(fileInfo => string.Compare(Path.GetFileName(fileInfo.Name), packagedPath, StringComparison.OrdinalIgnoreCase) == 0);
-                        if (file == null)
-                        {
-                            CommandLineLogger.LogError($"Package doesn't contain file named '{packagedPath}'");
-                            return;
-                        }
-                    }
-
-                    using (var fs = new FileStream(destinationPath, FileMode.Create, FileAccess.Write))
-                    {
-                        try
-                        {
-                            Stream stream = file.MakeStream();
-                            stream.CopyTo(fs);
-                        }
-                        finally
-                        {
-                            file.ReleaseStream();
-                        }
-
-                    }
-                }
-            }
-            catch (NotAPackageException)
-            {
-                CommandLineLogger.LogError("Failed to list package contents because the package is not an Original Sin package or savegame archive");
+                throw new NotImplementedException();
             }
             catch (Exception e)
             {
@@ -83,26 +50,7 @@ namespace Divine.CLI
         {
             try
             {
-                using (var reader = new PackageReader(packagePath))
-                {
-                    Package package = reader.Read();
-
-	                List<AbstractFileInfo> files = package.Files;
-
-	                if (filter != null)
-	                {
-		                files = files.FindAll(obj => filter(obj));
-	                }
-
-                    foreach (AbstractFileInfo fileInfo in files.OrderBy(obj => obj.Name))
-                    {
-                        Console.WriteLine($"{fileInfo.Name}\t{fileInfo.Size()}\t{fileInfo.CRC()}");
-                    }
-                }
-            }
-            catch (NotAPackageException)
-            {
-                CommandLineLogger.LogError("Failed to list package contents because the package is not an Original Sin package or savegame archive");
+                throw new NotImplementedException();
             }
             catch (Exception e)
             {
@@ -190,10 +138,6 @@ namespace Divine.CLI
                 packager.UncompressPackage(file, extractionPath, filter);
 
                 CommandLineLogger.LogInfo($"Extracted package to: {extractionPath}");
-            }
-            catch (NotAPackageException)
-            {
-                CommandLineLogger.LogError("Failed to extract package because the package is not an Original Sin package or savegame archive");
             }
             catch (Exception e)
             {

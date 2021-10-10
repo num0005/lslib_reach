@@ -230,23 +230,7 @@ namespace ConverterApp
 
         public void Run()
         {
-            ReportProgress(0, "Reading package ...");
-
-            using (var packageReader = new PackageReader(SaveFilePath))
-            {
-                SavePackage = packageReader.Read();
-
-                AbstractFileInfo abstractFileInfo = SavePackage.Files.FirstOrDefault(p => p.Name.ToLowerInvariant() == "globals.lsf");
-                if (abstractFileInfo == null)
-                {
-                    MessageBox.Show("The specified package is not a valid savegame (globals.lsf not found)", "Load Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                RunTasks();
-
-                MessageBox.Show($"Savegame dumped to {DataDumpPath}.");
-            }
+            throw new NotImplementedException();
         }
     }
 }
