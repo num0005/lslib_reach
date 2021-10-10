@@ -85,7 +85,7 @@ namespace LSLib.LS
             }
 
             packaged.SizeOnDisk = (UInt64) (stream.Position - (long)packaged.OffsetInFile);
-            packaged.Crc = Crc32.Compute(compressed, 0);
+            packaged.Crc = Utils.Crc32.Compute(compressed, 0);
 
             int padLength = PaddingLength();
             if (stream.Position % padLength <= 0)
