@@ -1,14 +1,12 @@
-﻿using System;
+﻿using LSLib.LS.Enums;
+using LZ4;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using LSLib.LS.Enums;
-using LSLib.Native;
-using LZ4;
-using Alphaleonis.Win32.Filesystem;
 using File = Alphaleonis.Win32.Filesystem.File;
 
 namespace LSLib.LS

@@ -2,12 +2,11 @@
 // #define DEBUG_GR2_FORMAT_DIFFERENCES
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
-using LSLib.Native;
 
 namespace LSLib.Granny.GR2
 {

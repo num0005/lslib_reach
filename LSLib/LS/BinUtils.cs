@@ -340,8 +340,7 @@ namespace LSLib.LS
                 case CompressionMethod.LZ4:
                     if (chunked)
                     {
-                        var decompressed = Native.LZ4FrameCompressor.Decompress(compressed);
-                        return decompressed;
+                        throw new NotImplementedException("no native code");
                     }
                     else
                     {
@@ -412,7 +411,7 @@ namespace LSLib.LS
         {
             if (chunked)
             {
-                return Native.LZ4FrameCompressor.Compress(uncompressed);
+                throw new NotImplementedException("no native code");
             }
             else if (compressionLevel == CompressionLevel.FastCompression)
             {

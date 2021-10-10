@@ -151,10 +151,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LSLibNative\LSLibNative.vcxproj">
-      <Project>{d8b26b12-e45c-47ea-88f7-56628eb2ccd1}</Project>
-      <Name>LSLibNative</Name>
-    </ProjectReference>
     <ProjectReference Include="..\OpenTK\OpenTK.csproj">
       <Project>{abb9db44-14f2-46e0-a4b8-b46c300ca982}</Project>
       <Name>OpenTK</Name>

@@ -185,25 +185,7 @@ namespace LSLib.LS
                 mainStream.Seek(0, SeekOrigin.Begin);
                 mainStream.Read(frame, 0, (int)lastOffset);
 
-                byte[] decompressed = Native.LZ4FrameCompressor.Decompress(frame);
-                var decompressedStream = new MemoryStream(decompressed);
-
-                // Update offsets to point to the decompressed chunk
-                uint offset = 7;
-                uint compressedOffset = 0;
-                foreach (var entry in entries)
-                {
-                    if (entry.OffsetInFile != offset)
-                    {
-                        throw new InvalidDataException("File list in solid archive not contiguous");
-                    }
-
-                    var file = PackagedFileInfo.CreateSolidFromEntry(entry, _streams[entry.ArchivePart], compressedOffset, decompressedStream);
-                    package.Files.Add(file);
-
-                    offset += entry.SizeOnDisk;
-                    compressedOffset += entry.UncompressedSize;
-                }
+                throw new NotImplementedException("no native code");
             }
             else
             {
