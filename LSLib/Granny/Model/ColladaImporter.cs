@@ -681,7 +681,7 @@ namespace LSLib.Granny.Model
 
                         var bone = skeleton.GetBoneByName(mesh.BoneBindings[bi].BoneName);
                         var invWorldTransform = ColladaHelpers.FloatsToMatrix(bone.InverseWorldTransform);
-                        var transformed = Vector3.Transform(vert.Position, invWorldTransform);
+                        var transformed = Vector4.Transform(new Vector4(vert.Position, 1.0f), invWorldTransform).Xyz;
 
                         obb.Min.X = Math.Min(obb.Min.X, transformed.X);
                         obb.Min.Y = Math.Min(obb.Min.Y, transformed.Y);
