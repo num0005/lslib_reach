@@ -10,10 +10,7 @@ namespace ConverterApp
 {
     public sealed partial class MainForm : Form, ISettingsDataSource
     {
-        PackagePane packagePane;
-        ResourcePane resourcePane;
-        OsirisPane osirisPane;
-        DebugPane debugPane;
+
 
         public ConverterAppSettings Settings { get; set; }
 
@@ -45,34 +42,6 @@ namespace ConverterApp
                 Size = gr2Tab.ClientSize
             };
             gr2Tab.Controls.Add(gr2Pane);
-
-            packagePane = new PackagePane(this)
-            {
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                Size = packageTab.ClientSize
-            };
-            packageTab.Controls.Add(packagePane);
-
-            resourcePane = new ResourcePane(this)
-            {
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                Size = resourceTab.ClientSize
-            };
-            resourceTab.Controls.Add(resourcePane);
-
-            osirisPane = new OsirisPane(this)
-            {
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                Size = osirisTab.ClientSize
-            };
-            osirisTab.Controls.Add(osirisPane);
-
-            debugPane = new DebugPane(this)
-            {
-                Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                Size = debugTab.ClientSize
-            };
-            debugTab.Controls.Add(debugPane);
 
             Text += $" (LSLib v{Common.LibraryVersion()})";
 
@@ -133,10 +102,6 @@ namespace ConverterApp
             {
                 pane.flipMeshes.Checked = game.IsFW3();
             }
-
-            packagePane.SetGame(game);
-            osirisPane.Game = game;
-            debugPane.Game = game;
         }
     }
 }
