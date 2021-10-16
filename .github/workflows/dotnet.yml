@@ -23,8 +23,8 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet.version }}
         include-prerelease: true
-    - name: Install dependencies
-      run: dotnet restore
+    - name: Install dependencies (Windows)
+      run: dotnet restore -f ${{matrix.dotnet.path}}-windows
     - name: Publish (ConverterApp)
       run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -f ${{matrix.dotnet.path}}-windows ConverterApp
     - name: Upload artifact (ConverterApp
@@ -32,6 +32,8 @@ jobs:
       with:
         name: ConverterApp
         path: ConverterApp\bin\Release\${{ matrix.dotnet.path}}-windows\win-x64\publish\
+    - name: Install dependencies
+      run: dotnet restore -f ${{matrix.dotnet.path}}-windows
     - name: Publish (Divine)
       run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -f ${{matrix.dotnet.path}} Divine
     - name: Upload artifact (Divine
