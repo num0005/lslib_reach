@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LSLib.LS;
-using OpenTK;
+using OpenTK.Mathematics;
 using Alphaleonis.Win32.Filesystem;
 using File = Alphaleonis.Win32.Filesystem.File;
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using LSLib.Granny.GR2;
-using OpenTK;
+using OpenTK.Mathematics;
 
 namespace LSLib.Granny.Model
 {

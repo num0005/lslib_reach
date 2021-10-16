@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using OpenTK;
+using OpenTK.Mathematics;
 
 namespace LSLib.Granny.GR2
 {
@@ -526,7 +526,7 @@ namespace LSLib.Granny.GR2
                     break;
 
                 case MemberType.Real16:
-                    Writer.Write((Half)node);
+                    Writer.Write((OpenTK.Mathematics.Half)node);
                     break;
 
                 case MemberType.Real32:

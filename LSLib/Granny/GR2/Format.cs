@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using OpenTK;
+using OpenTK.Mathematics;
 using System.IO;
 using System.Reflection;
 
@@ -1041,7 +1041,7 @@ namespace LSLib.Granny.GR2
                     member.Type = MemberType.Int32;
                 else if (type == typeof(UInt32))
                     member.Type = MemberType.UInt32;
-                else if (type == typeof(Half))
+                else if (type == typeof(OpenTK.Mathematics.Half))
                     member.Type = MemberType.Real16;
                 else if (type == typeof(Single))
                     member.Type = MemberType.Real32;

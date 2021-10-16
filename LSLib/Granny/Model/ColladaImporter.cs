@@ -4,7 +4,7 @@ using System.Linq;
 using Alphaleonis.Win32.Filesystem;
 using LSLib.Granny.GR2;
 using LSLib.LS;
-using OpenTK;
+using OpenTK.Mathematics;
 
 namespace LSLib.Granny.Model
 {
@@ -681,7 +681,7 @@ namespace LSLib.Granny.Model
 
                         var bone = skeleton.GetBoneByName(mesh.BoneBindings[bi].BoneName);
                         var invWorldTransform = ColladaHelpers.FloatsToMatrix(bone.InverseWorldTransform);
-                        var transformed = Vector4.Transform(new Vector4(vert.Position, 1.0f), invWorldTransform).Xyz;
+                        var transformed = Vector4.TransformRow(new Vector4(vert.Position, 1.0f), invWorldTransform).Xyz;
 
                         obb.Min.X = Math.Min(obb.Min.X, transformed.X);
                         obb.Min.Y = Math.Min(obb.Min.Y, transformed.Y);

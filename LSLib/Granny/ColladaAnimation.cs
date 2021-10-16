@@ -4,7 +4,7 @@ using System.Linq;
 using LSLib.Granny.GR2;
 using LSLib.Granny.Model;
 using LSLib.Granny.Model.CurveData;
-using OpenTK;
+using OpenTK.Mathematics;
 
 namespace LSLib.Granny
 {
