@@ -12,8 +12,8 @@ jobs:
   build:
     runs-on: windows-latest
     strategy:
-      matrix:
-        dotnet: ['5.0.x', '6.0.x']
+      matrix: # https://stackoverflow.com/a/68940067/16608030 hopefully this still works
+        dotnet: [ {version: '5.0.x', path: net5.0}, {version: '6.0.x', path: net6.0} ]
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT : true
     steps:
@@ -21,7 +21,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet }}
+        dotnet-version: ${{ matrix.dotnet.version }}
+        include-prerelease: true
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -34,13 +35,13 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: ConverterApp
-        path: ConverterApp\bin\Release\net5.0-windows\win-x64\publish\
+        path: ConverterApp\bin\Release\${{ matrix.dotnet.path}}-windows\win-x64\publish\
     - name: Publish (Divine)
       run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false Divine
     - name: Upload artifact (Divine
       uses: actions/upload-artifact@v2
       with:
         name: Divine
-        path: Divine\bin\Release\net5.0\win-x64\publish\
+        path: Divine\bin\Release\${{ matrix.dotnet.path}}\win-x64\publish\
         
         
