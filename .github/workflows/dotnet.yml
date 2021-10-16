@@ -25,19 +25,15 @@ jobs:
         include-prerelease: true
     - name: Install dependencies
       run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
     - name: Publish (ConverterApp)
-      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -p:TargetFramwork=${{matrix.dotnet.path}}-windows ConverterApp
+      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -f ${{matrix.dotnet.path}}-windows ConverterApp
     - name: Upload artifact (ConverterApp
       uses: actions/upload-artifact@v2
       with:
         name: ConverterApp
         path: ConverterApp\bin\Release\${{ matrix.dotnet.path}}-windows\win-x64\publish\
     - name: Publish (Divine)
-      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -p:TargetFramwork=${{matrix.dotnet.path}} Divine
+      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -f ${{matrix.dotnet.path}} Divine
     - name: Upload artifact (Divine
       uses: actions/upload-artifact@v2
       with:
