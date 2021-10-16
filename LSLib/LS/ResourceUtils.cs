@@ -125,13 +125,6 @@ namespace LSLib.LS
                         }
                     }
 
-                case ResourceFormat.LSJ:
-                    {
-                        using (var reader = new LSJReader(stream))
-                        {
-                            return reader.Read();
-                        }
-                    }
 
                 default:
                     throw new ArgumentException("Invalid resource format");
@@ -174,14 +167,6 @@ namespace LSLib.LS
                             writer.EncodeSiblingData = conversionParams.LSFEncodeSiblingData;
                             writer.Compression = conversionParams.Compression;
                             writer.CompressionLevel = conversionParams.CompressionLevel;
-                            writer.Write(resource);
-                            break;
-                        }
-
-                    case ResourceFormat.LSJ:
-                        {
-                            var writer = new LSJWriter(file);
-                            writer.PrettyPrint = conversionParams.PrettyPrint;
                             writer.Write(resource);
                             break;
                         }

@@ -136,9 +136,6 @@
     <Compile Include="LS\Resources\LSF\LSFCommon.cs" />
     <Compile Include="LS\Resources\LSF\LSFReader.cs" />
     <Compile Include="LS\Resources\LSF\LSFWriter.cs" />
-    <Compile Include="LS\Resources\LSJ\LSJReader.cs" />
-    <Compile Include="LS\Resources\LSJ\LSJResourceConverter.cs" />
-    <Compile Include="LS\Resources\LSJ\LSJWriter.cs" />
     <Compile Include="LS\Resources\LSX\LSXReader.cs" />
     <Compile Include="LS\Resources\LSX\LSXWriter.cs" />
     <Compile Include="LS\Matrix.cs" />
