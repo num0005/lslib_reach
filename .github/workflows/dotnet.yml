@@ -30,18 +30,18 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Publish (ConverterApp)
-      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false ConverterApp
+      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -p:TargetFramwork=${{matrix.dotnet.path}}-windows ConverterApp
     - name: Upload artifact (ConverterApp
       uses: actions/upload-artifact@v2
       with:
         name: ConverterApp
         path: ConverterApp\bin\Release\${{ matrix.dotnet.path}}-windows\win-x64\publish\
     - name: Publish (Divine)
-      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false Divine
+      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false -p:TargetFramwork=${{matrix.dotnet.path}} Divine
     - name: Upload artifact (Divine
       uses: actions/upload-artifact@v2
       with:
         name: Divine
-        path: Divine\bin\Release\${{ matrix.dotnet.path}}\win-x64\publish\
+        path: Divine\bin\Release\${{matrix.dotnet.path}}\win-x64\publish\
         
         
