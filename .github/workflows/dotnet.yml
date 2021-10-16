@@ -1,0 +1,46 @@
+name: .NET Latest
+
+on:
+  push:
+    paths-ignore:
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet: ['5.0.x', '6.0.x']
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT : true
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
+    - name: Publish (ConverterApp)
+      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false ConverterApp
+    - name: Upload artifact (ConverterApp
+      uses: actions/upload-artifact@v2
+      with:
+        name: ConverterApp
+        path: ConverterApp\bin\Release\net5.0-windows\win-x64\publish\
+    - name: Publish (Divine)
+      run: dotnet publish -c Release -r win-x64 -P:PublishSingleFile=true -p:PublishTrimmed=false --self-contained false Divine
+    - name: Upload artifact (Divine
+      uses: actions/upload-artifact@v2
+      with:
+        name: Divine
+        path: Divine\bin\Release\net5.0\win-x64\publish\
+        
+        
